@@ -16,3 +16,7 @@ data:
 snowflake:
   start_time: "2024-09-29" # 此处需显式声明为字符串，否则默认解析为时间格式后 sf解析时间格式初始化失败
   machine_id: 1
+
+consul:
+  address: 127.0.0.1:8500
+  scheme: http

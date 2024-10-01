@@ -9,6 +9,7 @@ message Bootstrap {
   Server server = 1;
   Data data = 2;
   Snowflake snowflake = 3;
+  Consul consul = 4;
 }
 
 message Server {
@@ -44,4 +45,9 @@ message Data {
 message Snowflake {
   string start_time = 1;
   int64 machine_id = 2;
+}
+
+message Consul {
+  string address = 1;
+  string scheme = 2;
 }
