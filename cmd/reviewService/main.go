@@ -22,7 +22,7 @@ var (
 	// Name is the name of the compiled software.
 	Name string = "reviewService"
 	// Version is the version of the compiled software.
-	Version string
+	Version string = "v0.1"
 	// flagconf is the config flag.
 	flagconf string
 
@@ -76,7 +76,7 @@ func main() {
 		panic(err)
 	}
 
-	app, cleanup, err := wireApp(bc.Server, bc.Data, bc.Consul, logger)
+	app, cleanup, err := wireApp(bc.Server, bc.Data, bc.Consul, bc.Es, logger)
 	if err != nil {
 		panic(err)
 	}

@@ -11,8 +11,8 @@ data:
     source: root:sw6813329@tcp(127.0.0.1:3306)/person_practice?parseTime=True&loc=Local
   redis:
     addr: 127.0.0.1:6379
-    read_timeout: 0.2s
-    write_timeout: 0.2s
+    read_timeout: 1s
+    write_timeout: 1s
 snowflake:
   start_time: "2024-09-29" # 此处需显式声明为字符串，否则默认解析为时间格式后 sf解析时间格式初始化失败
   machine_id: 1
@@ -20,3 +20,7 @@ snowflake:
 consul:
   address: 127.0.0.1:8500
   scheme: http
+
+es:
+  addresses:
+    - "http://127.0.0.1:9200" # 这里必须前缀加http://，否则报错无法连接

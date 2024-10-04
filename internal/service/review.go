@@ -18,7 +18,7 @@ func NewReviewService(uc *biz.ReviewUsecase) *ReviewService {
 	return &ReviewService{uc: uc}
 }
 
-// CreateReview 创建评价
+// CreateReview C端 创建评价
 func (s *ReviewService) CreateReview(ctx context.Context, req *pb.CreateReviewRequest) (*pb.CreateReviewReply, error) {
 	anonymous := 0
 	if req.GetAnonymous() {
@@ -54,6 +54,31 @@ func (s *ReviewService) GetReview(ctx context.Context, req *pb.GetReviewRequest)
 }
 func (s *ReviewService) ListReview(ctx context.Context, req *pb.ListReviewRequest) (*pb.ListReviewReply, error) {
 	return &pb.ListReviewReply{}, nil
+}
+
+// ListReviewByStoreID C端 依商家ID 获取 评价列表
+func (s *ReviewService) ListReviewByStoreID(ctx context.Context, req *pb.ListReviewByStoreIDRequest) (*pb.ListReviewByStoreIDReply, error) {
+	reviews, err := s.uc.ListReviewByStoreID(ctx, req.GetStoreID(), int64(req.GetPage()), int64(req.GetSize()))
+	if err != nil {
+		return nil, err
+	}
+
+	list := make([]*pb.ReviewInfo, 0, len(reviews))
+	for _, review := range reviews {
+		list = append(list, &pb.ReviewInfo{
+			ReviewID:     review.ReviewID,
+			UserID:       review.UserID,
+			OrderID:      review.OrderID,
+			Score:        review.Score,
+			ServiceScore: review.ServiceScore,
+			ExpressScore: review.ExpressScore,
+			Content:      review.Content,
+			PicInfo:      review.PicInfo,
+			VideoInfo:    review.VideoInfo,
+			Status:       review.Status,
+		})
+	}
+	return &pb.ListReviewByStoreIDReply{List: list}, nil
 }
 
 // ReplyReview B端 回复评价

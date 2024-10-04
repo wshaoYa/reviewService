@@ -10,6 +10,7 @@ message Bootstrap {
   Data data = 2;
   Snowflake snowflake = 3;
   Consul consul = 4;
+  ES es =5;
 }
 
 message Server {
@@ -50,4 +51,8 @@ message Snowflake {
 message Consul {
   string address = 1;
   string scheme = 2;
+}
+
+message ES {
+  repeated string addresses = 1;
 }

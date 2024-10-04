@@ -14,6 +14,7 @@ import (
 type ReviewRepo interface {
 	Save(context.Context, *model.ReviewInfo) (*model.ReviewInfo, error) // C端 发布评价
 	GetByOrderID(context.Context, int64) (*model.ReviewInfo, error)
+	ListReviewByStoreID(ctx context.Context, storeID int64, offset int64, limit int64) ([]*MyReviewInfo, error) // C端 依商家ID获取评价列表
 
 	AuditReview(context.Context, *model.ReviewInfo) error       // O端 审核评价
 	AuditAppeal(context.Context, *model.ReviewAppealInfo) error // O端 审核申诉
@@ -33,7 +34,7 @@ func NewReviewUsecase(repo ReviewRepo, logger log.Logger) *ReviewUsecase {
 	return &ReviewUsecase{repo: repo, log: log.NewHelper(logger)}
 }
 
-// CreateReview 创建评价
+// CreateReview C端 创建评价
 func (uc *ReviewUsecase) CreateReview(ctx context.Context, r *model.ReviewInfo) (*model.ReviewInfo, error) {
 	//业务逻辑校验——判断此订单是否已评价过
 	reviews, err := uc.repo.GetByOrderID(ctx, r.OrderID)
@@ -55,6 +56,19 @@ func (uc *ReviewUsecase) CreateReview(ctx context.Context, r *model.ReviewInfo) 
 	//r.Status = 10
 
 	return uc.repo.Save(ctx, r)
+}
+
+// ListReviewByStoreID C端 依商家ID获取评价列表
+func (uc *ReviewUsecase) ListReviewByStoreID(ctx context.Context, storeID int64, page int64, size int64) ([]*MyReviewInfo, error) {
+	//参数校验
+	page = max(page, 1)
+	if size <= 0 || size >= 50 {
+		size = 10
+	}
+
+	offset := (page - 1) * size
+	limit := size
+	return uc.repo.ListReviewByStoreID(ctx, storeID, offset, limit)
 }
 
 // CreateReply B端 回复评价
