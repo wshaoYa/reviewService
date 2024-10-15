@@ -15,10 +15,10 @@
 
 整体采用CQRS架构模式实现项目中读、写操作采⽤不同的存储模型：
 
-![img_3.png](img_3.png)
+![image-20241015154050237](https://s2.loli.net/2024/10/15/hSDKGYL98niM6oV.png)
 
 具体架构：
-![img_1.png](img_1.png)
+![image-20241015154041979](https://s2.loli.net/2024/10/15/ZWMFNjdSzUgvJY3.png)
 
 涉及技术栈：
 
