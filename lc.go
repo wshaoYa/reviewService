@@ -1,25 +1,44 @@
 package reviewService
 
-func isValid(s string) bool {
+import (
+	"strconv"
+	"unicode"
+)
+
+func decodeString(s string) string {
 	var (
-		n  = len(s)
-		mp = map[rune]rune{')': '(', '}': '{', ']': '['}
-		st = make([]rune, 0, n)
+		st []rune
 	)
 
-	if n%2 == 1 {
-		return false
-	}
-
 	for _, c := range s {
-		if v := mp[c]; v == 0 {
+		if c != ']' {
 			st = append(st, c)
-		} else {
-			if len(st) == 0 || st[len(st)-1] != v {
-				return false
-			}
-			st = st[:len(st)-1]
+			continue
+		}
+
+		//str
+		var j int
+		for j = len(st) - 1; st[j] != '['; j-- {
+		}
+		//str := slices.Clone(st[j+1:])
+		str := st[j+1:]
+		st = st[:j]
+
+		//num
+		for j--; j >= 0 && unicode.IsDigit(st[j]); j-- {
+		}
+		num, _ := strconv.Atoi(string(st[j+1:]))
+		st = st[:j+1]
+
+		//append
+		for i := 0; i < num; i++ {
+			st = append(st, str...)
 		}
 	}
-	return len(st) == 0
+
+	return string(st)
+}
+
+func main() {
+	decodeString("3[a2[c]]")
 }
